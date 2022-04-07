@@ -55,7 +55,7 @@ class PatientUserForm(forms.ModelForm):
         }
 class PatientForm(forms.ModelForm):
     class Meta:
-        model=models.Patient
+        model=models.Patient 
         fields=['address','status','symptoms','profile_pic','gender']
 
 

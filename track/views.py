@@ -1,10 +1,11 @@
-from pyexpat.errors import messages
+from django.contrib import messages
 
 from django.contrib import auth
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render, redirect
+from django.contrib.auth import logout, authenticate
 
 from . import forms, models
 
@@ -121,7 +122,7 @@ def patient_signup_view(request):
 
 #check the type of the user
 def is_admin(user):
-    return user.groups.filter(name='ADMIN').exists()
+    return user.is_staff
 
 
 def is_doctor(user):
@@ -134,6 +135,9 @@ def is_patient(user):
 def is_nurse(user):
     return user.groups.filter(name='NURSE').exists()
 
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
 
 # ---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,DOCTOR,PATIENT OR NURSE
 def afterlogin_view(request):
@@ -142,8 +146,9 @@ def afterlogin_view(request):
             username = request.POST['username']
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
-
-            if user is not None and user.groups.filter(name='ADMIN').exists():
+            print(user.is_staff)
+            if user.is_staff:
+                print("Asdasdasd")
                 auth.login(request, user)
                 return redirect('admin-dashboard')
             elif user is not None and user.groups.filter(name='DOCTOR').exists():
@@ -153,19 +158,17 @@ def afterlogin_view(request):
                 auth.login(request, user)
                 return redirect('nurse-dashboard')
             elif user is not None and user.groups.filter(name='PATIENT').exists():
-                print("asdafdgfbvdfvdfv")
                 auth.login(request, user)
                 return redirect('patient-dashboard')
             else:
-                messages.info(request, 'error')
+                messages.info(request,'user not found')
                 return redirect('login')
         else:
-            return render(request, 'login.html')
+            return render(request, 'loginPage.html')
     else:
-        if request.user.groups.filter(name='ADMIN'):
+        if request.user.is_staff:
             return redirect('admin-dashboard')
         if request.user.groups.filter(name='DOCTOR'):
-            # print("asdasdasd")
             return redirect('doctor-dashboard')
         if request.user.groups.filter(name='NURSE'):
             return redirect('nurse-dashboard')
@@ -174,7 +177,7 @@ def afterlogin_view(request):
 
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_dashboard_view(request):
     mydict = {
@@ -182,14 +185,14 @@ def admin_dashboard_view(request):
     return render(request, 'admin_dashboard.html', context=mydict)
 
 
-@login_required(login_url='doctorlogin')
+# @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_dashboard(request):
     mydict = {
     }
     return render(request, 'doctor_dashboard.html', context=mydict)
 
-@login_required(login_url='nurselogin')
+# @login_required(login_url='nurselogin')
 @user_passes_test(is_nurse)
 def nurse_dashboard(request):
     mydict = {
@@ -198,7 +201,7 @@ def nurse_dashboard(request):
 
 
 
-@login_required(login_url='patientlogin')
+# @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
 def patient_dashboard(request):
     mydict = {
@@ -206,7 +209,7 @@ def patient_dashboard(request):
     return render(request, 'patient_dashboard.html', context=mydict)
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_add_nurse(request):
     userForm = forms.NurseUserForm()
     nurseForm = forms.NurseForm()
@@ -229,7 +232,7 @@ def admin_add_nurse(request):
         return HttpResponseRedirect('/admin-view-nurse')
     return render(request, 'admin_add_nurse.html', context=mydict)
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_add_patient(request):
     userForm = forms.PatientUserForm()
     patientForm = forms.PatientForm()
@@ -253,7 +256,7 @@ def admin_add_patient(request):
 
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_add_doctor(request):
     userForm = forms.DoctorUserForm()
     doctorForm = forms.DoctorForm()
@@ -275,17 +278,17 @@ def admin_add_doctor(request):
         return HttpResponseRedirect('/admin-view-doctor')
     return render(request, 'admin_add_doctor.html', context=mydict)
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_page(request):
     return render(request, 'adminPage.html')
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_view_nurse(request):
     nurses = models.Nurse.objects.all()
     return render(request, 'admin_view_nurse.html', {'nurses': nurses})
 
 
-@login_required(login_url='doctorlogin')
+# @login_required(login_url='doctorlogin')
 @user_passes_test(is_doctor)
 def doctor_patient_view(request):
     mydict = {
@@ -294,44 +297,44 @@ def doctor_patient_view(request):
     return render(request, 'doctor_patient.html', context=mydict)
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_patient_view(request):
     return render(request, 'admin_patient.html')
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_doctor_view(request):
     return render(request, 'admin_doctor.html')
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_nurse_view(request):
     return render(request, 'admin_nurse.html')
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_view_doctor_view(request):
     doctors = models.Doctor.objects.all()
     return render(request, 'admin_view_doctor.html', {'doctors': doctors})
 
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def delete_doctor_view(request, pk):
     doctor = models.Doctor.objects.get(id=pk)
     user = models.User.objects.get(id=doctor.user_id)
     user.delete()
-    doctor.delete()
+    doctor.delete() 
     return HttpResponseRedirect('/admin-view-doctor')
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_view_nurse_view(request):
     nurses = models.Nurse.objects.all()
     return render(request, 'admin_view_doctor.html', {'nurses': nurses})
 
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def delete_nurse_view(request, pk):
     nurse = models.Nurse.objects.get(id=pk)
     user = models.User.objects.get(id=nurse.user_id)
@@ -339,15 +342,22 @@ def delete_nurse_view(request, pk):
     nurse.delete()
     return HttpResponseRedirect('/admin-view-nurse')
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def admin_view_patient_view(request):
     patients = models.Patient.objects.all()
     return render(request, 'admin_view_patient.html', {'patients': patients})
 
-@login_required(login_url='adminlogin')
+# @login_required(login_url='adminlogin')
 def delete_patient_view(request, pk):
     patient = models.Patient.objects.get(id=pk)
     user = models.User.objects.get(id=patient.user_id)
     user.delete()
     patient.delete()
     return HttpResponseRedirect('/admin-view-patient')
+
+def about(request):
+    return render(request, 'aboutus.html')
+
+
+def contactus(request):
+    return render(request, 'contactus.html')

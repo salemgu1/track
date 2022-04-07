@@ -37,6 +37,7 @@ urlpatterns = [
 
 
     path('adminlogin', LoginView.as_view(template_name='loginPage.html')),
+    path('login',views.afterlogin_view,name='login'),
     path('doctorlogin', LoginView.as_view(template_name='loginPage.html')),
     path('nurselogin', LoginView.as_view(template_name='loginPage.html')),
     path('patientlogin', LoginView.as_view(template_name='loginPage.html')),
@@ -45,7 +46,7 @@ urlpatterns = [
     path('admin-patient', views.admin_patient_view, name='admin-patient'),
     path('admin-doctor', views.admin_doctor_view, name='admin-doctor'),
     path('admin-nurse', views.admin_nurse_view, name='admin-nurse'),
-
+ 
     path('admin-view-doctor', views.admin_view_doctor_view, name='admin-view-doctor'),
     path('admin-view-nurses', views.admin_view_nurse_view, name='admin-view-nurse'),
     path('admin-view-patient', views.admin_view_patient_view, name='admin-view-patient'),
@@ -70,6 +71,13 @@ urlpatterns = [
     path('admin-view-patient', views.admin_view_nurse, name='admin-view-patient'),
     path('admin-add-doctor', views.admin_add_doctor, name='admin-add-doctor'),
     path('admin-view-doctor', views.admin_view_nurse, name='admin-view-doctor'),
+    
+    
+    
+    path('aboutus', views.about, name='aboutus'),
+    path('contactus', views.contactus, name='contactus'),
+
+    
 
 
 
@@ -77,5 +85,5 @@ urlpatterns = [
 
 
 
-    path('logout', LogoutView.as_view(template_name='index.html'),name='logout'),
+    path('logout', views.logoutUser,name='logout'),
 ]

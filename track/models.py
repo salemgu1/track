@@ -3,6 +3,7 @@ from django.db import models
 
 
 class Doctor(models.Model):
+
     user=models.OneToOneField(User,on_delete=models.CASCADE)
     address = models.CharField(max_length=40)
     mobile = models.CharField(max_length=20,null=True)
@@ -33,7 +34,7 @@ class Patient(models.Model):
     profile_pic = models.ImageField(upload_to='profile_pic/DoctorProfilePic/', null=True, blank=True)
     admitDate=models.DateField(auto_now=True)
     status=models.BooleanField(default=False)
-    Urine_surgery=models.CharField(max_length=1000)
+    Urine_surgery=models.CharField(max_length=1000,default='u')
     Blood_Pressure=models.IntegerField(default=80)
     Fats=models.IntegerField(default=20)
     Cholesterol=models.IntegerField(default=5)
