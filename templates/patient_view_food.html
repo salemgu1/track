@@ -1,4 +1,4 @@
-{% extends 'admin_base.html' %}
+{% extends 'patient_base.html' %}
 {% block content %}
 {%load static%}
 
@@ -25,29 +25,31 @@
 <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
-      <h6 class="panel-title">Doctors</h6>
+      <h6 class="panel-title">Food</h6>
     </div>
     <table class="table table-hover" id="dev-table">
       <thead>
         <tr>
 
           <th>Name</th>
-          <th>Profile Picture</th>
-          <th>Mobile</th>
-          <th>Address</th>
-          <th>Department</th>
-          <th>Delete</th>
+          <th>Many in day</th>
+          <th>Max Cholesterol</th>
+          <th>Max Liver Function</th>
+          <th>Max Kidney Function</th>
+          <th>Max Blood Pressure</th>
+          <th>Image</th>
+          <th>Add to food list</th>
         </tr>
       </thead>
-      {% for d in doctors %}
-      <tr>
 
-        <td> {{d.get_name}}</td>
-        <td> <img src="{% static d.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
-        <td>{{d.mobile}}</td>
-        <td>{{d.address}}</td>
-        <td>{{d.department}}</td>
-        <td><a class="btn btn-danger btn-xs" href="{% url 'delete-doctor' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+        <td> {{patient.Name}}</td>
+        <td> {{patient.number}}</td>
+        <td> {{patient.max_Cholesterol}}</td>
+        <td> {{patient.max_Liver_function}}</td>
+        <td> {{patient.max_Kidney_function}}</td>
+        <td> {{patient.max_Blood_Pressure}}</td>
+        <td> <img src="{% static patient.pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
+</div>
       </tr>
       {% endfor %}
     </table>

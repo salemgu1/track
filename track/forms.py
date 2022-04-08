@@ -56,6 +56,18 @@ class PatientUserForm(forms.ModelForm):
 class PatientForm(forms.ModelForm):
     class Meta:
         model=models.Patient 
-        fields=['address','status','symptoms','profile_pic','gender']
+        fields=['address','status','symptoms','profile_pic','gender','age']
+
+class DeactivateUserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['is_active']
 
 
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = models.Feedback
+        fields = ['by', 'message']
+        widgets = {
+            'message': forms.Textarea(attrs={'rows': 6, 'cols': 30})
+        }

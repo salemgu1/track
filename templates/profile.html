@@ -1,17 +1,7 @@
-<!DOCTYPE html>
+{% extends 'patient_base.html' %}
 {% load static %}
-<html lang="en">
 
-<head>
-  <meta charset="UTF-8">
-
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+{% block title %}Profile Page{% endblock title %}
 
 
   <style media="screen">
@@ -269,34 +259,99 @@
       }
     }
 
+        * {
+    margin: 0;
+    padding: 0
+}
 
+body {
+    background-color: #000
+}
+
+.card {
+    width: 350px;
+    background-color: #efefef;
+    border: none;
+    cursor: pointer;
+    transition: all 0.5s
+}
+
+.image img {
+    transition: all 0.5s
+}
+
+.card:hover .image img {
+    transform: scale(1.5)
+}
+
+.btn {
+    height: 140px;
+    width: 140px;
+    border-radius: 50%
+}
+
+.name {
+    font-size: 22px;
+    font-weight: bold
+}
+
+.idd {
+    font-size: 14px;
+    font-weight: 600
+}
+
+.idd1 {
+    font-size: 12px
+}
+
+.number {
+    font-size: 22px;
+    font-weight: bold
+}
+
+.follow {
+    font-size: 12px;
+    font-weight: 500;
+    color: #444444
+}
+
+.btn1 {
+    height: 40px;
+    width: 150px;
+    border: none;
+    background-color: #000;
+    color: #aeaeae;
+    font-size: 15px
+}
+
+.text span {
+    font-size: 13px;
+    color: #545454;
+    font-weight: 500
+}
+
+.icons i {
+    font-size: 19px
+}
+
+hr .new1 {
+    border: 1px solid
+}
+
+.join {
+    font-size: 14px;
+    color: #a0a0a0;
+    font-weight: bold
+}
+
+.date {
+    background-color: #ccc
+}
   </style>
-</head>
-
-<body>
-  <!-- partial:index.partial.html -->
-  <nav class="menu" tabindex="0">
-    <div class="smartphone-menu-trigger"></div>
-    <header class="avatar">
-       <br><br> <br><br>
-      <img src="{% static doctor.profile_pic.url %}" alt="Profile Pic" />
-      <br><br>
-      <h6>Nurse</h6>
-      <h2>{{request.user.first_name}}</h2>
-    </header>
-    <ul>
-      <li tabindex="0" class="icon-dashboard"> <a style="color:white; text-decoration:none;" href="/nurse-dashboard"><span>Dashboard</span></a> </li>
-      <li tabindex="0" class="icon-users"> <a style="color:white; text-decoration:none;" href="/nurse-patient"><span>Patient</span></a></li>
-      <li tabindex="0" class="icon-calendar"> <a style="color:white; text-decoration:none;" href="/nurse-feedback"><span>Feedback</span></a></li>
-      <li tabindex="0" class="icon-calendar"> <a style="color:white; text-decoration:none;" href="nurse-food"><span>Food</span></a></li>
-    </ul>
-  </nav>
-  <main>
-    <!-- nav start -->
-
+<nav>
     <div class="bs-example">
       <nav class="navbar navbar-expand-md  navbar-dark fixed-top" style="background:#337AB7;">
-        <a href="/nurse-dashboard" class="navbar-brand">Track Your Health</a>
+        <a href="/admin-dashboard" class="navbar-brand">Track Your Health</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -308,32 +363,19 @@
         </div>
       </nav>
     </div>
-    <!-- nav end -->
-    <br><br>
-    <!-- content start-->
-    {% block content %}
-    {% endblock content %}
-    <!-- content end-->
-    <br><br><br><br><br><br><br>
-    <footer>
-      <p>
-        <a id="ftr" href="" class="fa fa-facebook"></a>
-        <a id="ftr" href="" class="fa fa-whatsapp"></a>
-        <a id="ftr" href="" class="fa fa-instagram"></a>
-        <a id="ftr" href="" class="fa fa-twitter"></a>
-      </p>
-      <br>
-      <div class="container">
-        <div class="row">
-          <div class="col-md-12 col-sm-12">
-            <div style="color:#ffffff;" class="wow fadeInUp footer-copyright">
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
-  </main>
-  <!-- partial -->
-</body>
+    </nav>
 
-</html>
+{% block content %}
+<br><br><br><br><br><br><br>
+<div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
+    <div class="card p-4">
+        <div class=" image d-flex flex-column justify-content-center align-items-center"><img src="{% static  user.profile_pic.url %}" height="100" width="100" /></button> <span class="name mt-3">{{user.username}}</span>
+
+            <div class=" d-flex mt-2"> <button class="btn1 btn-dark">Edit Profile</button> </div>
+
+
+    </div>
+</div>
+
+
+{% endblock content %}

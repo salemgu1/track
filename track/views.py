@@ -8,6 +8,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate
 
 from . import forms, models
+from django.shortcuts import get_object_or_404
 
 
 def home_view(request):
@@ -139,27 +140,22 @@ def logoutUser(request):
     logout(request)
     return redirect('login')
 
-# ---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,DOCTOR,PATIENT OR NURSE
+# ---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,PATIENT OR NURSE
 def afterlogin_view(request):
     if request.user.is_authenticated == False:
         if request.method == 'POST':
             username = request.POST['username']
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
-            print(user.is_staff)
             if user.is_staff:
-                print("Asdasdasd")
                 auth.login(request, user)
                 return redirect('admin-dashboard')
-            elif user is not None and user.groups.filter(name='DOCTOR').exists():
-                auth.login(request, user)
-                return redirect('doctor-dashboard')
             elif user is not None and user.groups.filter(name='NURSE').exists():
                 auth.login(request, user)
                 return redirect('nurse-dashboard')
             elif user is not None and user.groups.filter(name='PATIENT').exists():
                 auth.login(request, user)
-                return redirect('patient-dashboard')
+                return redirect('patient-dashboard',id=user.id)
             else:
                 messages.info(request,'user not found')
                 return redirect('login')
@@ -173,7 +169,7 @@ def afterlogin_view(request):
         if request.user.groups.filter(name='NURSE'):
             return redirect('nurse-dashboard')
         if request.user.groups.filter(name='PATIENT'):
-            return redirect('patient-dashboard')
+            return redirect('patient-dashboard',id=request.user.id)
 
 
 
@@ -203,13 +199,17 @@ def nurse_dashboard(request):
 
 # @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
-def patient_dashboard(request):
-    mydict = {
-    }
+def patient_dashboard(request,id):
+    mydict={}
+    user = models.User.objects.get(pk=request.user.pk)
+    for i in models.Patient.objects.all():
+        if i.user.id==user.id:
+            mydict['user']=i
     return render(request, 'patient_dashboard.html', context=mydict)
 
 
 # @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def admin_add_nurse(request):
     userForm = forms.NurseUserForm()
     nurseForm = forms.NurseForm()
@@ -233,6 +233,7 @@ def admin_add_nurse(request):
     return render(request, 'admin_add_nurse.html', context=mydict)
 
 # @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def admin_add_patient(request):
     userForm = forms.PatientUserForm()
     patientForm = forms.PatientForm()
@@ -257,6 +258,7 @@ def admin_add_patient(request):
 
 
 # @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def admin_add_doctor(request):
     userForm = forms.DoctorUserForm()
     doctorForm = forms.DoctorForm()
@@ -279,10 +281,12 @@ def admin_add_doctor(request):
     return render(request, 'admin_add_doctor.html', context=mydict)
 
 # @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def admin_page(request):
     return render(request, 'adminPage.html')
 
 # @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def admin_view_nurse(request):
     nurses = models.Nurse.objects.all()
     return render(request, 'admin_view_nurse.html', {'nurses': nurses})
@@ -342,12 +346,12 @@ def delete_nurse_view(request, pk):
     nurse.delete()
     return HttpResponseRedirect('/admin-view-nurse')
 
-# @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def admin_view_patient_view(request):
     patients = models.Patient.objects.all()
     return render(request, 'admin_view_patient.html', {'patients': patients})
 
-# @login_required(login_url='adminlogin')
+@user_passes_test(is_admin)
 def delete_patient_view(request, pk):
     patient = models.Patient.objects.get(id=pk)
     user = models.User.objects.get(id=patient.user_id)
@@ -361,3 +365,140 @@ def about(request):
 
 def contactus(request):
     return render(request, 'contactus.html')
+
+
+@login_required
+def profile(request):
+    user = models.User.objects.get(pk=request.user.pk)
+    dict={'user':user}
+    return render(request, 'profile.html',dict)
+
+@user_passes_test(is_patient)
+def edit_patient_profile(request):
+    patient = models.Patient.objects.get(user_id=request.user.id)
+    user = models.User.objects.get(id=patient.user_id)
+    userForm = forms.PatientUserForm(instance=user)
+    patientForm = forms.PatientForm(request.FILES, instance=patient)
+    mydict = {'userForm': userForm, 'patientForm': patientForm, 'patient': patient}
+    if request.method == 'POST':
+        userForm = forms.PatientUserForm(request.POST, instance=user)
+        patientForm = forms.PatientForm(request.POST, instance=patient)
+        if userForm.is_valid() and patientForm.is_valid():
+            user = userForm.save()
+            user.set_password(user.password)
+            user.save()
+            patientForm.save()
+            return HttpResponseRedirect('profile')
+    return render(request, 'edit_patient_profile.html', context=mydict)
+
+
+
+@user_passes_test(is_nurse)
+def nurse_feedback(request):
+    nurse = models.Nurse.objects.get(user_id=request.user.id)
+    feedback = forms.FeedbackForm()
+    if request.method == 'POST':
+        feedback = forms.FeedbackForm(request.POST)
+        if feedback.is_valid():
+            feedback.save()
+        else:
+            print("form is invalid")
+        return render(request, 'feedback_for_nurse.html', {'nurse': nurse})
+    return render(request, 'nurse_feedback.html', {'feedback': feedback, 'nurse': nurse})
+
+
+@user_passes_test(is_admin)
+def admin_feedbacks(request):
+    feedback = models.Feedback.objects.all().order_by('-id')
+    return render(request, 'admin_feedbacks.html', {'feedback': feedback})
+
+@user_passes_test(is_nurse)
+def nurse_view_patient(request):
+    patients = models.Patient.objects.all()
+    return render(request, 'nurse_view_patients.html', {'patients': patients})
+
+# def update_price(request,pk):
+#     if request.method == "GET":
+#         product = models.Coffee.objects.get(id=pk)
+#         form = CoffeeForm(instance=product)
+#     # product.price = int(request.POST['price'])
+#         return render(request,'multiplex/update_price.html',{'form':form})
+#     elif request.method == "POST":
+#         product = models.Coffee.objects.get(id=pk)
+#         form = CoffeeForm(request.POST,instance=product)
+#         # form.save()
+#         if form.is_valid():
+#             print("asdasdasdasd")
+#             form.save()
+#         return redirect('admin-view-product')
+
+
+@user_passes_test(is_nurse)
+def nurse_add_food(request):
+    if request.method == 'POST':
+
+        food = models.Food()
+        food.Name = request.POST['Name']
+        food.number = request.POST['num']
+        food.max_Cholesterol = request.POST['max_Cholesterol']
+        food.max_Liver_function = request.POST['max_Liver_function']
+        food.max_Kidney_function = request.POST['max_Kidney_function']
+        food.max_Blood_Pressure = request.POST['max_Blood_Pressure']
+        food.pic = request.FILES['pic']
+        food.save()
+        return HttpResponseRedirect('nurse-dashboard')
+    return render(request, 'nurse_add_food.html')
+
+
+@user_passes_test(is_nurse)
+def nurse_food(request):
+    return render(request,'nurse_food.html')
+    
+    
+@user_passes_test(is_nurse)
+def nurse_view_food(request):
+    food = models.Food.objects.all()
+    return render(request, 'nurse_view_food.html', {'food': food})
+
+
+def food_list(request,food_id):
+    if request.user.is_authenticated and not request.user.is_anonymous:
+        food=models.Food.objects.get(pk=food_id)
+        if models.Patient.objects.filter(user=request.user,food_list=food).exists():
+            messages.success(request,'\t')
+        else:
+            user=models.Patient.objects.get(user=request.user)
+            user.food_list.add(food)
+            messages.success(request,'Product has been favorite')
+    else:
+        redirect('')
+    return redirect('patient-view-food')
+
+
+def show_food_list(request):
+    context=None
+    if request.user.is_authenticated and not request.user.is_anonymous:
+        userInfo=models.Patient.objects.get(user=request.user)
+        food=userInfo.food_list.all()
+        context={'food':food}
+    return render(request,'show_food_list.html',context)
+
+@user_passes_test(is_patient)
+def patient_view_food(request):
+    food = models.Food.objects.all()
+    return render(request, 'patient_view_food.html', {'food': food})
+
+
+@user_passes_test(is_nurse)
+def delete_food(request, pk):
+    food = models.Food.objects.get(id=pk)
+    food.delete()
+    return HttpResponseRedirect('/nurse-view-food')
+
+@user_passes_test(is_patient)
+def patient_details(request):
+    print(request.user.id)
+    patient = models.Patient.objects.get(id=request.user.id)
+    return render(request,'patient_view_details.html',{'patient':patient})
+
+

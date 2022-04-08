@@ -1,4 +1,4 @@
-{% extends 'admin_base.html' %}
+{% extends 'nurse_base.html' %}
 {% block content %}
 {%load static%}
 
@@ -32,8 +32,6 @@
 
           <th>Name</th>
           <th>Age</th>
-          <th>Profile Picture</th>
-          <th>Address</th>
           <th>Blood Pressure</th>
           <th>Urine Surgery</th>
           <th>Fats</th>
@@ -41,24 +39,20 @@
           <th>Liver Function</th>
           <th>Kidney Function</th>
           <th>Gender</th>
-          <th>Delete</th>
         </tr>
       </thead>
-
       {% for d in patients %}
+      <tr>
 
-        <td> {{d.first_name}}</td>
-        <td>{{d.age}}</td>
-        <td> <img src="{% static d.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
-        <td>{{d.address}}</td>
-        <td>{{d.Blood_Pressure}}</td>
+        <td> {{d.get_name}}</td>
+        <td> {{d.age}}</td>
+        <td>{{d.Blood_Pressure}}<a href=""><button style="float: right"><i class="bi bi-arrow-up-circle-fill"></i></button></a></td>
         <td>{{d.Urine_surgery}}</td>
-        <td>{{d.Fats}}</td>
-        <td>{{d.Cholesterol}}</td>
-        <td>{{d.Liver_function}}</td>
-        <td>{{d.Kidney_function}}</td>
+        <td>{{d.Fats}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Cholesterol}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Liver_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Kidney_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
         <td>{{d.gender}}</td>
-                <td><a class="btn btn-danger btn-xs" href="{% url 'delete-patient' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
       </tr>
       {% endfor %}
     </table>

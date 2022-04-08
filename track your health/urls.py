@@ -51,11 +51,14 @@ urlpatterns = [
     path('admin-view-nurses', views.admin_view_nurse_view, name='admin-view-nurse'),
     path('admin-view-patient', views.admin_view_patient_view, name='admin-view-patient'),
 
+    path('nurse-patient', views.nurse_view_patient, name='nurse-patient'),
+    # path('update-price/<int:pk>', views.update_price, name='update-price'),
+
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
 
 
     path('admin-dashboard', views.admin_page, name='admin-dashboard'),
-    path('patient-dashboard', views.patient_dashboard, name='patient-dashboard'),
+    path('patient-dashboard/<int:id>', views.patient_dashboard, name='patient-dashboard'),
     path('doctor-dashboard', views.doctor_dashboard, name='doctor-dashboard'),
     path('nurse-dashboard', views.nurse_dashboard, name='nurse-dashboard'),
 
@@ -68,21 +71,32 @@ urlpatterns = [
     path('admin-add-nurse', views.admin_add_nurse, name='admin-add-nurse'),
     path('admin-view-nurse', views.admin_view_nurse, name='admin-view-nurse'),
     path('admin-add-patient', views.admin_add_patient, name='admin-add-patient'),
-    path('admin-view-patient', views.admin_view_nurse, name='admin-view-patient'),
+    path('admin-view-patient', views.admin_view_patient_view, name='admin-view-patient'),
     path('admin-add-doctor', views.admin_add_doctor, name='admin-add-doctor'),
-    path('admin-view-doctor', views.admin_view_nurse, name='admin-view-doctor'),
-    
-    
-    
+    path('admin-view-doctor', views.admin_view_doctor_view, name='admin-view-doctor'),
+
+
+
     path('aboutus', views.about, name='aboutus'),
     path('contactus', views.contactus, name='contactus'),
+    path('nurse-feedback', views.nurse_feedback, name='nurse-feedback'),
+    path('admin-feedbacks', views.admin_feedbacks, name='admin-feedbacks'),
 
-    
+    # path('delete-patient-user/<int:pk>', views.delete_patient, name='delete-patient-user'),
 
+    path('profile/', views.profile, name='users-profile'),
+     # for the nurse to setup food
+    path('nurse-add-food', views.nurse_add_food, name='nurse-add-food'),
+    path('nurse-food', views.nurse_food, name='nurse-food'),
+    path('nurse-view-food', views.nurse_view_food, name='nurse-view-food'),
+    path('delete-food/<int:pk>', views.delete_food, name='delete-food'),
 
+    #for the patient to add food to food_list
+    path('food-favorite/<int:food_id>',views.food_list,name='food-favorite'),
+    path('show-food-list', views.show_food_list, name='show-food-list'),
+    path('patient-view-food', views.patient_view_food, name='patient-view-food'),
 
-
-
+    path('patient-details', views.patient_details, name='patient-details'),
 
 
     path('logout', views.logoutUser,name='logout'),
