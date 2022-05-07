@@ -1,4 +1,4 @@
-{% extends 'nurse_base.html' %}
+{% extends 'admin_base.html' %}
 {% load widget_tweaks %}
 {% block content %}
 <head>
@@ -47,20 +47,12 @@
 </head>
 
 <br><br><br><br><br>
-<h3 style="text-align:center;">Send Feedback To Admin</h3>
+<h3 style="text-align:center;">Send Replay</h3>
 <div>
   <form method="post" style="margin-left:200px;margin-right:200px;">
       {% csrf_token %}
-
-    <label for="by">Your Name</label>
-    {% render_field feedback.by class="form-control"  %}
-
-    <label for="message">Message</label>
-    {% render_field feedback.message class="form-control"  %}
-
-    <label for="message">Message</label>
-    {% render_field feedback.senderType class="form-control"  %}
-
+        <label for="replay">Replay </label>
+        <input type="text" name="replay" id="number" value="" required>
 
     <input type="submit" value="Send">
   </form>

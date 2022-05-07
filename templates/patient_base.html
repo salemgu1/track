@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 {% load static %}
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
 
@@ -277,6 +276,7 @@
   <nav class="menu" tabindex="0">
     <div class="smartphone-menu-trigger"></div>
     <header class="avatar">
+      <br><br>
       <img src="{% static doctor.profile_pic.url %}" alt="Profile Pic" />
       <br><br>
       <h6>Patient</h6>
@@ -285,15 +285,17 @@
     <ul>
       <li tabindex="0" class="icon-profile"> <a style="color:white; text-decoration:none;" href="/profile"><span>Profile</span></a> </li>
       <li tabindex="0" class="icon-dashboard"> <a style="color:white; text-decoration:none;" href="/patient-dashboard"><span>Dashboard</span></a> </li>
-            <li tabindex="0" class="icon-calendar"> <a style="color:white; text-decoration:none;" href="patient-view-food"><span>Food</span></a></li>
-      <li tabindex="0" class="icon-dashboard"> <a style="color:white; text-decoration:none;" href="/show-food-list"><span>Food List</span></a> </li>
+            <li tabindex="0" class="icon-food"> <a style="color:white; text-decoration:none;" href="/patient-view-food"><span>Food</span></a></li>
+      <li tabindex="0" class="icon-food"> <a style="color:white; text-decoration:none;" href="/show-food-list"><span>Food List</span></a> </li>
+      <li tabindex="0" class="icon-food"> <a style="color:white; text-decoration:none;" href="/show-medication-list"><span>Medication List</span></a> </li>
+      <li tabindex="0" class="icon-dashboard"> <a style="color:white; text-decoration:none;" href="patient-feedback"><span>Send message for doctor</span></a> </li>
+      <li tabindex="0" class="icon-dashboard"> <a style="color:white; text-decoration:none;" href="patient-replays"><span>message with replays</span></a> </li>
     </ul>
   </nav>
   <main>
-    <!-- nav start -->
     <div class="bs-example">
       <nav class="navbar navbar-expand-md  navbar-dark fixed-top" style="background:#337AB7;">
-        <a href="{% url 'delete-patient' request.user.id  %}" class="navbar-brand">Track Your Health</a>
+        <a href="/patient-dashboard" class="navbar-brand">Track Your Health</a>
         <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -305,20 +307,10 @@
         </div>
       </nav>
     </div>
-    <!-- nav end -->
-    <br><br>
-    <!-- content start-->
     {% block content %}
     {% endblock content %}
-    <!-- content end-->
-    <br><br><br><br><br><br><br>
+    <!-- nav end -->
     <footer>
-<!--      <p>-->
-<!--        <a id="ftr" href="" class="fa fa-facebook"></a>-->
-<!--        <a id="ftr" href="72181024&text=Hello%20Sumit.%0d%0aHow%20are%20you%20%3f%0d%0aI%20came%20from%20your%20website.&source=&data=#" class="fa fa-whatsapp"></a>-->
-<!--        <a id="ftr" href="https://instagram.com/sumit.luv" class="fa fa-instagram"></a>-->
-<!--        <a id="ftr" href="https://twitter.com/sumitkumar1503" class="fa fa-twitter"></a>-->
-<!--      </p>-->
       <br>
       <div class="container">
         <div class="row">

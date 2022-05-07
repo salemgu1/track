@@ -1,6 +1,24 @@
 {% extends 'patient_base.html' %}
 {% load static %}
 {% block content %}
+<head>
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style media="screen">
+        a:link {
+      text-decoration: none;
+    }
+
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+</style>
+</head>
     <div class="container">
   <div class="panel panel-primary">
     <div class="panel-heading">
@@ -8,16 +26,24 @@
     <table class="table table-hover" id="dev-table">
       <thead>
 
-          <th>Name</th>
-          <br>
-          <th>Urine surgery</th><td> {{user.Urine_surgery}}</td>
-          <th>Blood Pressure</th>
-          <th>Fats</th>
-          <th>Cholesterol</th>
-          <th>Liver function</th>
-          <th>Kidney function</th>
-          <th>Add to food list</th>
-      </thead>
+<tr>
+      <th scope="col" >CRN</th>
+      <th scope="col">Subject</th>
+      <th scope="col">Course</th>
+      <th scope="col">Credits</th>
+      <th scope="col">Title</th>
+      <th scope="col">Days</th>
+      <th scope="col">Times</th>
+      <th scope="col">Instructor</th>
+      <th scope="col">Attribute</th>
+      <th scope="col">Professor Difficulty</th>
+      <th scope="col">Professor Rating</th>
+      <th scope="col">Would Take Again</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <tr>
 
         <td> {{user.first_name}}</td>
         <td> {{user.Urine_surgery}}</td>
@@ -26,6 +52,16 @@
         <td> {{user.Cholesterol}}</td>
         <td> {{user.Liver_function}}</td>
         <td> {{user.Kidney_function}}</td>
+      <td data-bs-toggle="tooltip" data-bs-placement="top" title="Information Taken From RateMyProfessor">
+         <div class="progress">
+             </div>
+         </div>
+      </td>
+    </tr>
+
+  </tbody>
+</table>
+</div>
 </div>
 
 {% endblock content %}

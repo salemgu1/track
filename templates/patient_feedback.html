@@ -1,4 +1,4 @@
-{% extends 'nurse_base.html' %}
+{% extends 'patient_base.html' %}
 {% load widget_tweaks %}
 {% block content %}
 <head>
@@ -58,7 +58,7 @@
     <label for="message">Message</label>
     {% render_field feedback.message class="form-control"  %}
 
-    <label for="message">Message</label>
+    <label for="senderType">Message</label>
     {% render_field feedback.senderType class="form-control"  %}
 
 

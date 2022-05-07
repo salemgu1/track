@@ -47,7 +47,7 @@
 
       {% for d in patients %}
 
-        <td> {{d.first_name}}</td>
+        <td> {{d.user}}</td>
         <td>{{d.age}}</td>
         <td> <img src="{% static d.profile_pic.url %}" alt="Profile Pic" height="40px" width="40px" /></td>
         <td>{{d.address}}</td>
@@ -59,6 +59,7 @@
         <td>{{d.Kidney_function}}</td>
         <td>{{d.gender}}</td>
                 <td><a class="btn btn-danger btn-xs" href="{% url 'delete-patient' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
+                <td><a class="btn btn-danger btn-xs" href="{% url 'add-medication' d.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
       </tr>
       {% endfor %}
     </table>

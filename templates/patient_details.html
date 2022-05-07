@@ -41,20 +41,18 @@
           <th>Gender</th>
         </tr>
       </thead>
-      {% for d in patients %}
       <tr>
 
-        <td> {{d.get_name}}</td>
-        <td> {{d.age}}</td>
-        <td>{{d.Blood_Pressure}}<a href=""><button style="float: right"><i class="bi bi-arrow-up-circle-fill"></i></button></a></td>
-        <td>{{d.Urine_surgery}}</td>
-        <td>{{d.Fats}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.Cholesterol}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.Liver_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.Kidney_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.gender}}</td>
+        <td> {{request.user.get_name}}</td>
+        <td> {{request.user.age}}</td>
+        <td>{{request.user.Blood_Pressure}}<a href=""><button style="float: right"><i class="bi bi-arrow-up-circle-fill"></i></button></a></td>
+        <td>{{request.user.Urine_surgery}}</td>
+        <td>{{request.user.Fats}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{request.user.Cholesterol}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{request.user.Liver_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{request.user.Kidney_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{request.user.gender}}</td>
       </tr>
-      {% endfor %}
     </table>
   </div>
 </div>

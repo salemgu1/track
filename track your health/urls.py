@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth.views import LoginView, LogoutView
 from django.urls import path
-
+from django.conf.urls.static import static
+from django.conf import settings
 from track import views
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -52,13 +55,14 @@ urlpatterns = [
     path('admin-view-patient', views.admin_view_patient_view, name='admin-view-patient'),
 
     path('nurse-patient', views.nurse_view_patient, name='nurse-patient'),
-    # path('update-price/<int:pk>', views.update_price, name='update-price'),
+    path('update-Urine-surgery/<int:pk>', views.upadateUrineSurgery, name='update-Urine-surgery'),
+    path('update-Glucose/<int:id>', views.updateGlucose, name='update-Glucose'),
 
     path('afterlogin', views.afterlogin_view,name='afterlogin'),
 
 
     path('admin-dashboard', views.admin_page, name='admin-dashboard'),
-    path('patient-dashboard/<int:id>', views.patient_dashboard, name='patient-dashboard'),
+    path('patient-dashboard', views.patient_dashboard, name='patient-dashboard'),
     path('doctor-dashboard', views.doctor_dashboard, name='doctor-dashboard'),
     path('nurse-dashboard', views.nurse_dashboard, name='nurse-dashboard'),
 
@@ -81,6 +85,9 @@ urlpatterns = [
     path('contactus', views.contactus, name='contactus'),
     path('nurse-feedback', views.nurse_feedback, name='nurse-feedback'),
     path('admin-feedbacks', views.admin_feedbacks, name='admin-feedbacks'),
+    path('patient-feedback', views.patient_feedback, name='patient-feedback'),
+    path('send-replay/<int:pk>', views.admin_replay, name='send-replay'),
+    path('patient-replays', views.feedback_list, name='patient-replays'),
 
     # path('delete-patient-user/<int:pk>', views.delete_patient, name='delete-patient-user'),
 
@@ -95,9 +102,11 @@ urlpatterns = [
     path('food-favorite/<int:food_id>',views.food_list,name='food-favorite'),
     path('show-food-list', views.show_food_list, name='show-food-list'),
     path('patient-view-food', views.patient_view_food, name='patient-view-food'),
+    path('show-medication-list', views.show_medication_list, name='show-medication-list'),
 
     path('patient-details', views.patient_details, name='patient-details'),
+    path('add-medication/<int:id_patient>', views.add_medication, name='add-medication'),
 
 
     path('logout', views.logoutUser,name='logout'),
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

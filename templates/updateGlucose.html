@@ -1,4 +1,4 @@
-{% extends 'nurse_base.html' %}
+{% extends 'patient_base.html' %}
 {% load widget_tweaks %}
 {% block content %}
 <head>
@@ -47,22 +47,14 @@
 </head>
 
 <br><br><br><br><br>
-<h3 style="text-align:center;">Send Feedback To Admin</h3>
+<h3 style="text-align:center;">Update Glucose Test</h3>
 <div>
   <form method="post" style="margin-left:200px;margin-right:200px;">
       {% csrf_token %}
+        <label style="color:#0037ff;font-size:25px;" for="Glucose">result: </label>
+        <input type="number" name="Glucose" id="number" value="" required>
 
-    <label for="by">Your Name</label>
-    {% render_field feedback.by class="form-control"  %}
-
-    <label for="message">Message</label>
-    {% render_field feedback.message class="form-control"  %}
-
-    <label for="message">Message</label>
-    {% render_field feedback.senderType class="form-control"  %}
-
-
-    <input type="submit" value="Send">
+    <input type="submit" value="Update">
   </form>
 </div>
 

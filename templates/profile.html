@@ -2,7 +2,24 @@
 {% load static %}
 
 {% block title %}Profile Page{% endblock title %}
+<head>
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style media="screen">
+        a:link {
+      text-decoration: none;
+    }
 
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+</style>
+</head>
 
   <style media="screen">
     a:link {
@@ -348,31 +365,31 @@ hr .new1 {
     background-color: #ccc
 }
   </style>
-<nav>
-    <div class="bs-example">
-      <nav class="navbar navbar-expand-md  navbar-dark fixed-top" style="background:#337AB7;">
-        <a href="/admin-dashboard" class="navbar-brand">Track Your Health</a>
-        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-          <div class="navbar-nav" style=" margin-left: 90%;">
+<head>
+      <link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+  <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<style media="screen">
+        a:link {
+      text-decoration: none;
+    }
 
-            <a href="/logout" class="nav-item nav-link">Logout</a>
-          </div>
-        </div>
-      </nav>
-    </div>
-    </nav>
+    h6 {
+      text-align: center;
+    }
+
+    .row {
+      margin: 100px;
+    }
+</style>
+</head>
 
 {% block content %}
 <br><br><br><br><br><br><br>
 <div class="container mt-4 mb-4 p-3 d-flex justify-content-center">
     <div class="card p-4">
         <div class=" image d-flex flex-column justify-content-center align-items-center"><img src="{% static  user.profile_pic.url %}" height="100" width="100" /></button> <span class="name mt-3">{{user.username}}</span>
-
-            <div class=" d-flex mt-2"> <button class="btn1 btn-dark">Edit Profile</button> </div>
-
+            <td>Glucose  {{user.Glucose}}<a href="{% url 'update-Glucose' request.user.pk  %}"><button style="float: right">Update Glucose Test</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
 
     </div>
 </div>

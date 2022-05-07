@@ -12,38 +12,37 @@ from django.shortcuts import get_object_or_404
 
 
 def home_view(request):
-    if request.user.is_authenticated:           #check if the user is authenticated
+    if request.user.is_authenticated:  # check if the user is authenticated
         return HttpResponseRedirect('afterlogin')
-    return render(request, 'index.html')        #home page
-
+    return render(request, 'index.html')  # home page
 
 
 def adminclick_view(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('afterlogin')       #after login for the admin
+        return HttpResponseRedirect('afterlogin')  # after login for the admin
     return render(request, 'adminclick.html')
-
 
 
 def doctorclick_view(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('afterlogin')       #after login for the doctor
+        return HttpResponseRedirect('afterlogin')  # after login for the doctor
     return render(request, 'doctorclick.html')
 
 
 def nurseclick_view(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('afterlogin')       #after login for the nurse
+        return HttpResponseRedirect('afterlogin')  # after login for the nurse
     return render(request, 'nurseclick.html')
 
 
 # for showing signup/login button for patient(by sumit)
 def patientclick_view(request):
     if request.user.is_authenticated:
-        return HttpResponseRedirect('afterlogin')   #after login for the patient
+        return HttpResponseRedirect('afterlogin')  # after login for the patient
     return render(request, 'patientclick.html')
 
-#admin signup
+
+# admin signup
 def admin_signup_view(request):
     form = forms.AdminSigupForm()
     if request.method == 'POST':
@@ -57,7 +56,8 @@ def admin_signup_view(request):
             return HttpResponseRedirect('adminlogin')
     return render(request, 'adminsignup.html', {'form': form})
 
-#doctor signup
+
+# doctor signup
 def doctor_signup_view(request):
     userForm = forms.DoctorUserForm()
     doctorForm = forms.DoctorForm()
@@ -79,9 +79,9 @@ def doctor_signup_view(request):
         return HttpResponseRedirect('doctorlogin')
     return render(request, 'doctorsignup.html', context=mydict)
 
-#nurse signup
-def nurse_signup_view(request):
 
+# nurse signup
+def nurse_signup_view(request):
     userForm = forms.NurseUserForm()
     nurseForm = forms.NurseForm()
     mydict = {'userForm': userForm, 'nurseForm': nurseForm}
@@ -100,7 +100,8 @@ def nurse_signup_view(request):
         return HttpResponseRedirect('nurselogin')
     return render(request, 'nursesignup.html', context=mydict)
 
-#patient signup
+
+# patient signup
 def patient_signup_view(request):
     userForm = forms.PatientUserForm()
     patientForm = forms.PatientForm()
@@ -108,8 +109,10 @@ def patient_signup_view(request):
     if request.method == 'POST':
         userForm = forms.PatientUserForm(request.POST)
         patientForm = forms.PatientForm(request.POST, request.FILES)
+        print(patientForm.is_valid())
         if userForm.is_valid() and patientForm.is_valid():
             user = userForm.save()
+
             user.set_password(user.password)
             user.save()
             patient = patientForm.save(commit=False)
@@ -121,7 +124,8 @@ def patient_signup_view(request):
         return HttpResponseRedirect('patientlogin')
     return render(request, 'patientsignup.html', context=mydict)
 
-#check the type of the user
+
+# check the type of the user
 def is_admin(user):
     return user.is_staff
 
@@ -133,12 +137,15 @@ def is_doctor(user):
 def is_patient(user):
     return user.groups.filter(name='PATIENT').exists()
 
+
 def is_nurse(user):
     return user.groups.filter(name='NURSE').exists()
+
 
 def logoutUser(request):
     logout(request)
     return redirect('login')
+
 
 # ---------AFTER ENTERING CREDENTIALS WE CHECK WHETHER USERNAME AND PASSWORD IS OF ADMIN,PATIENT OR NURSE
 def afterlogin_view(request):
@@ -155,9 +162,9 @@ def afterlogin_view(request):
                 return redirect('nurse-dashboard')
             elif user is not None and user.groups.filter(name='PATIENT').exists():
                 auth.login(request, user)
-                return redirect('patient-dashboard',id=user.id)
+                return redirect('patient-dashboard')
             else:
-                messages.info(request,'user not found')
+                messages.info(request, 'user not found')
                 return redirect('login')
         else:
             return render(request, 'loginPage.html')
@@ -169,8 +176,7 @@ def afterlogin_view(request):
         if request.user.groups.filter(name='NURSE'):
             return redirect('nurse-dashboard')
         if request.user.groups.filter(name='PATIENT'):
-            return redirect('patient-dashboard',id=request.user.id)
-
+            return redirect('patient-dashboard')
 
 
 # @login_required(login_url='adminlogin')
@@ -188,6 +194,7 @@ def doctor_dashboard(request):
     }
     return render(request, 'doctor_dashboard.html', context=mydict)
 
+
 # @login_required(login_url='nurselogin')
 @user_passes_test(is_nurse)
 def nurse_dashboard(request):
@@ -196,15 +203,14 @@ def nurse_dashboard(request):
     return render(request, 'nurse_dashboard.html', context=mydict)
 
 
-
 # @login_required(login_url='patientlogin')
 @user_passes_test(is_patient)
-def patient_dashboard(request,id):
-    mydict={}
+def patient_dashboard(request):
+    mydict = {}
     user = models.User.objects.get(pk=request.user.pk)
     for i in models.Patient.objects.all():
-        if i.user.id==user.id:
-            mydict['user']=i
+        if i.user.id == user.id:
+            mydict['user'] = i
     return render(request, 'patient_dashboard.html', context=mydict)
 
 
@@ -232,6 +238,7 @@ def admin_add_nurse(request):
         return HttpResponseRedirect('/admin-view-nurse')
     return render(request, 'admin_add_nurse.html', context=mydict)
 
+
 # @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_add_patient(request):
@@ -241,9 +248,9 @@ def admin_add_patient(request):
     if request.method == 'POST':
         userForm = forms.PatientUserForm(request.POST)
         patientForm = forms.PatientForm(request.POST, request.FILES)
-        print(userForm.is_valid())
-        print(patientForm.is_valid())
-        if userForm.is_valid() and patientForm.is_valid():
+
+        if userForm.is_valid() and patientForm.is_valid() and not is_patient(request) and not is_admin(
+                request) and not is_nurse(request):
             user = userForm.save()
             user.set_password(user.password)
             user.save()
@@ -254,7 +261,6 @@ def admin_add_patient(request):
             my_patient_group[0].user_set.add(user)
         return HttpResponseRedirect('/admin-view-patient')
     return render(request, 'admin_add_patient.html', context=mydict)
-
 
 
 # @login_required(login_url='adminlogin')
@@ -280,10 +286,12 @@ def admin_add_doctor(request):
         return HttpResponseRedirect('/admin-view-doctor')
     return render(request, 'admin_add_doctor.html', context=mydict)
 
+
 # @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_page(request):
     return render(request, 'adminPage.html')
+
 
 # @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
@@ -306,10 +314,12 @@ def doctor_patient_view(request):
 def admin_patient_view(request):
     return render(request, 'admin_patient.html')
 
+
 # @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
 def admin_doctor_view(request):
     return render(request, 'admin_doctor.html')
+
 
 # @login_required(login_url='adminlogin')
 @user_passes_test(is_admin)
@@ -323,14 +333,14 @@ def admin_view_doctor_view(request):
     return render(request, 'admin_view_doctor.html', {'doctors': doctors})
 
 
-
 # @login_required(login_url='adminlogin')
 def delete_doctor_view(request, pk):
     doctor = models.Doctor.objects.get(id=pk)
     user = models.User.objects.get(id=doctor.user_id)
     user.delete()
-    doctor.delete() 
+    doctor.delete()
     return HttpResponseRedirect('/admin-view-doctor')
+
 
 # @login_required(login_url='adminlogin')
 def admin_view_nurse_view(request):
@@ -346,10 +356,12 @@ def delete_nurse_view(request, pk):
     nurse.delete()
     return HttpResponseRedirect('/admin-view-nurse')
 
+
 @user_passes_test(is_admin)
 def admin_view_patient_view(request):
     patients = models.Patient.objects.all()
     return render(request, 'admin_view_patient.html', {'patients': patients})
+
 
 @user_passes_test(is_admin)
 def delete_patient_view(request, pk):
@@ -359,6 +371,7 @@ def delete_patient_view(request, pk):
     patient.delete()
     return HttpResponseRedirect('/admin-view-patient')
 
+
 def about(request):
     return render(request, 'aboutus.html')
 
@@ -367,11 +380,15 @@ def contactus(request):
     return render(request, 'contactus.html')
 
 
-@login_required
+
 def profile(request):
+    mydict = {}
     user = models.User.objects.get(pk=request.user.pk)
-    dict={'user':user}
-    return render(request, 'profile.html',dict)
+    for i in models.Patient.objects.all():
+        if i.user.id == user.id:
+            mydict['user'] = i
+    return render(request, 'profile.html', mydict)
+
 
 @user_passes_test(is_patient)
 def edit_patient_profile(request):
@@ -390,7 +407,6 @@ def edit_patient_profile(request):
             patientForm.save()
             return HttpResponseRedirect('profile')
     return render(request, 'edit_patient_profile.html', context=mydict)
-
 
 
 @user_passes_test(is_nurse)
@@ -412,31 +428,16 @@ def admin_feedbacks(request):
     feedback = models.Feedback.objects.all().order_by('-id')
     return render(request, 'admin_feedbacks.html', {'feedback': feedback})
 
+
 @user_passes_test(is_nurse)
 def nurse_view_patient(request):
     patients = models.Patient.objects.all()
     return render(request, 'nurse_view_patients.html', {'patients': patients})
 
-# def update_price(request,pk):
-#     if request.method == "GET":
-#         product = models.Coffee.objects.get(id=pk)
-#         form = CoffeeForm(instance=product)
-#     # product.price = int(request.POST['price'])
-#         return render(request,'multiplex/update_price.html',{'form':form})
-#     elif request.method == "POST":
-#         product = models.Coffee.objects.get(id=pk)
-#         form = CoffeeForm(request.POST,instance=product)
-#         # form.save()
-#         if form.is_valid():
-#             print("asdasdasdasd")
-#             form.save()
-#         return redirect('admin-view-product')
-
 
 @user_passes_test(is_nurse)
 def nurse_add_food(request):
     if request.method == 'POST':
-
         food = models.Food()
         food.Name = request.POST['Name']
         food.number = request.POST['num']
@@ -452,36 +453,41 @@ def nurse_add_food(request):
 
 @user_passes_test(is_nurse)
 def nurse_food(request):
-    return render(request,'nurse_food.html')
-    
-    
+    return render(request, 'nurse_food.html')
+
+
 @user_passes_test(is_nurse)
 def nurse_view_food(request):
     food = models.Food.objects.all()
     return render(request, 'nurse_view_food.html', {'food': food})
 
 
-def food_list(request,food_id):
+def food_list(request, food_id):
+    patient = models.Patient.objects.get(user=request.user)
+    food = models.Food.objects.get(pk=food_id)
+    check = patient.Cholesterol > food.max_Cholesterol or patient.Liver_function > food.max_Liver_function or patient.Kidney_function > food.max_Kidney_function or patient.Blood_Pressure > food.max_Blood_Pressure
+    print(check)
     if request.user.is_authenticated and not request.user.is_anonymous:
-        food=models.Food.objects.get(pk=food_id)
-        if models.Patient.objects.filter(user=request.user,food_list=food).exists():
-            messages.success(request,'\t')
-        else:
-            user=models.Patient.objects.get(user=request.user)
+        food = models.Food.objects.get(pk=food_id)
+        if models.Patient.objects.filter(user=request.user, food_list=food).exists() or check == True:
+            messages.error(request, '\t')
+        elif check != True:
+            user = models.Patient.objects.get(user=request.user)
             user.food_list.add(food)
-            messages.success(request,'Product has been favorite')
+            messages.success(request, '\t')
     else:
         redirect('')
     return redirect('patient-view-food')
 
 
 def show_food_list(request):
-    context=None
+    context = None
     if request.user.is_authenticated and not request.user.is_anonymous:
-        userInfo=models.Patient.objects.get(user=request.user)
-        food=userInfo.food_list.all()
-        context={'food':food}
-    return render(request,'show_food_list.html',context)
+        userInfo = models.Patient.objects.get(user=request.user)
+        food = userInfo.food_list.all()
+        context = {'food': food}
+    return render(request, 'show_food_list.html', context)
+
 
 @user_passes_test(is_patient)
 def patient_view_food(request):
@@ -495,10 +501,92 @@ def delete_food(request, pk):
     food.delete()
     return HttpResponseRedirect('/nurse-view-food')
 
+
 @user_passes_test(is_patient)
 def patient_details(request):
-    print(request.user.id)
     patient = models.Patient.objects.get(id=request.user.id)
-    return render(request,'patient_view_details.html',{'patient':patient})
+    return render(request, 'patient_details.html', {'patient': patient})
 
 
+def add_medication(request, id_patient):
+    if request.method == 'POST':
+        medication = models.Medication()
+        medication.name = request.POST['name']
+        medication.dosage = request.POST['dosage']
+        medication.mg = request.POST['mg']
+        medication.save()
+        patient = models.Patient.objects.get(pk=id_patient)
+        patient.medication_dosages.add(medication)
+        return render(request, 'admin_view_patient.html', context={'patients': models.Patient.objects.all()})
+    return render(request, 'admin_add_medication.html')
+
+
+def upadateUrineSurgery(request, pk):
+    if request.method == "GET":
+        patient = models.Patient.objects.get(id=pk)
+        form = forms.Patient(instance=patient)
+        return render(request, 'updateUrineSurgery.html', {'form': form})
+    elif request.method == "POST":
+        patient = models.Patient.objects.get(id=pk)
+        form = forms.Patient(request.POST, instance=patient)
+        if form.is_valid():
+            print("asdasdasdasd")
+            form.save()
+        return redirect('nurse-patient')
+
+
+@user_passes_test(is_patient)
+def patient_feedback(request):
+    patient = models.Patient.objects.get(user_id=request.user.id)
+    feedback = forms.FeedbackForm()
+    if request.method == 'POST':
+        feedback = forms.FeedbackForm(request.POST)
+        if feedback.is_valid():
+            feedback.save()
+            user = models.Patient.objects.get(user=request.user)
+        else:
+            print("form is invalid")
+        return render(request, 'feedback_for_patient.html', {'patient': patient})
+    return render(request, 'patient_feedback.html', {'feedback': feedback, 'patient': patient})
+
+
+def feedback_list(request):
+    context = None
+    if request.user.is_authenticated and not request.user.is_anonymous:
+        print("Asdasdasd")
+        userInfo = models.Patient.objects.get(user=request.user)
+        # feedbacks=userInfo.feedbacks.all()
+        # print(feedbacks)
+        # context={'feedbacks':feedbacks}
+        return render(request, 'patient_feedbacks.html', context)
+
+
+@user_passes_test(is_admin)
+def admin_replay(request, pk):
+    feedback = models.Feedback.objects.all().get(id=pk)
+    if request.method == 'POST':
+        feedback.replay = request.POST['replay']
+        feedback.save()
+    return render(request, 'admin_replay.html')
+
+
+def updateGlucose(request, id):
+    # print(pk)
+    # if request.method == "GET":
+    user = models.User.objects.get(pk=id)
+    for i in models.Patient.objects.all():
+        if i.user.id == user.id:
+            if request.method == 'POST':
+                i.Glucose = request.POST['Glucose']
+                i.save()
+    return render(request, 'updateGlucose.html')
+
+
+def show_medication_list(request):
+    context = None
+    if request.user.is_authenticated and not request.user.is_anonymous:
+        userInfo = models.Patient.objects.get(user=request.user)
+        print(userInfo.food_list)
+        medication = userInfo.medication_dosages.all()
+        context = {'medication': medication}
+    return render(request, 'show_medication_list.html', context)
