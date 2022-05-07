@@ -521,18 +521,14 @@ def add_medication(request, id_patient):
     return render(request, 'admin_add_medication.html')
 
 
-def upadateUrineSurgery(request, pk):
-    if request.method == "GET":
-        patient = models.Patient.objects.get(id=pk)
-        form = forms.Patient(instance=patient)
-        return render(request, 'updateUrineSurgery.html', {'form': form})
-    elif request.method == "POST":
-        patient = models.Patient.objects.get(id=pk)
-        form = forms.Patient(request.POST, instance=patient)
-        if form.is_valid():
-            print("asdasdasdasd")
-            form.save()
-        return redirect('nurse-patient')
+def upadateUrineSurgery(request, id):
+    for i in models.Patient.objects.all():
+        if i.id == id:
+            if request.method == 'POST':
+                i.Urine_surgery = request.POST['UrineSurgery']
+                i.save()
+    return render(request, 'updateUrineSurgery.html')
+
 
 
 @user_passes_test(is_patient)
