@@ -54,7 +54,9 @@ urlpatterns = [
 
                   path('nurse-patient', views.nurse_view_patient, name='nurse-patient'),
                   path('update-Urine-surgery/<int:id>', views.upadateUrineSurgery, name='update-Urine-surgery'),
+                  path('update-ECG/<int:id>', views.upadateECG, name='update-ECG'),
                   path('update-Glucose/<int:id>', views.updateGlucose, name='update-Glucose'),
+                  path('update-BloodPressure/<int:id>', views.updateBloodPressure, name='update-BloodPressure'),
 
                   path('afterlogin', views.afterlogin_view, name='afterlogin'),
 

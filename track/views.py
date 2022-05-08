@@ -465,7 +465,6 @@ def food_list(request, food_id):
     patient = models.Patient.objects.get(user=request.user)
     food = models.Food.objects.get(pk=food_id)
     check = patient.Cholesterol > food.max_Cholesterol or patient.Liver_function > food.max_Liver_function or patient.Kidney_function > food.max_Kidney_function or patient.Blood_Pressure > food.max_Blood_Pressure
-    print(check)
     if request.user.is_authenticated and not request.user.is_anonymous:
         food = models.Food.objects.get(pk=food_id)
         if models.Patient.objects.filter(user=request.user, food_list=food).exists() or check == True:
@@ -477,15 +476,6 @@ def food_list(request, food_id):
     else:
         redirect('')
     return redirect('patient-view-food')
-
-
-def show_food_list(request):
-    context = None
-    if request.user.is_authenticated and not request.user.is_anonymous:
-        userInfo = models.Patient.objects.get(user=request.user)
-        food = userInfo.food_list.all()
-        context = {'food': food}
-    return render(request, 'show_food_list.html', context)
 
 
 @user_passes_test(is_patient)
@@ -529,6 +519,14 @@ def upadateUrineSurgery(request, id):
     return render(request, 'updateUrineSurgery.html')
 
 
+def upadateECG(request, id):
+    for i in models.Patient.objects.all():
+        if i.id == id:
+            if request.method == 'POST':
+                i.ECG = request.POST['ECG']
+                i.save()
+    return render(request, 'updateECG.html')
+
 @user_passes_test(is_patient)
 def patient_feedback(request):
     if request.method == 'POST':
@@ -556,6 +554,15 @@ def feedback_list(request):
                 feedbacks = patient.feedbacks.all()
         return render(request, 'patient_feedbacks.html', {'feedbacks': feedbacks})
 
+def show_food_list(request):
+    context = {}
+    if request.user.is_authenticated and not request.user.is_anonymous:
+        for i in models.Patient.objects.all():
+            if request.user == i.user:
+                patient = i
+                context['food'] = patient.food_list.all()
+    return render(request, 'show_food_list.html', context)
+
 
 @user_passes_test(is_admin)
 def admin_replay(request, pk):
@@ -577,6 +584,19 @@ def updateGlucose(request, id):
                 i.Glucose = request.POST['Glucose']
                 i.save()
     return render(request, 'updateGlucose.html')
+
+
+
+def updateBloodPressure(request, id):
+    # print(pk)
+    # if request.method == "GET":
+    user = models.User.objects.get(pk=id)
+    for i in models.Patient.objects.all():
+        if i.user.id == user.id:
+            if request.method == 'POST':
+                i.Blood_Pressure = request.POST['BloodPressure']
+                i.save()
+    return render(request, 'updateBloodPressure.html')
 
 
 def show_medication_list(request):

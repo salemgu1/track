@@ -69,6 +69,7 @@ class Patient(models.Model):
     Cholesterol = models.IntegerField(default=150)
     Liver_function = models.IntegerField(default=55)
     Kidney_function = models.IntegerField(default=60)
+    ECG = models.IntegerField(default=70)
     Glucose = models.IntegerField(default=80)
     food_list = models.ManyToManyField(Food)
     feedbacks = models.ManyToManyField(Feedback)
