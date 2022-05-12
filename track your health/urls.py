@@ -57,7 +57,7 @@ urlpatterns = [
                   path('update-ECG/<int:id>', views.upadateECG, name='update-ECG'),
                   path('update-Glucose/<int:id>', views.updateGlucose, name='update-Glucose'),
                   path('update-BloodPressure/<int:id>', views.updateBloodPressure, name='update-BloodPressure'),
-
+                  path('update-LiverFunction/<int:id>', views.updateLiverFunction, name='update-LiverFunction'),
                   path('afterlogin', views.afterlogin_view, name='afterlogin'),
 
                   path('admin-dashboard', views.admin_page, name='admin-dashboard'),
@@ -78,6 +78,10 @@ urlpatterns = [
 
                   path('aboutus', views.about, name='aboutus'),
                   path('contactus', views.contactus, name='contactus'),
+                  path("contact", views.contact, name="contact"),
+    
+    
+    
                   path('nurse-feedback', views.nurse_feedback, name='nurse-feedback'),
                   path('admin-feedbacks', views.admin_feedbacks, name='admin-feedbacks'),
                   path('patient-feedback', views.patient_feedback, name='patient-feedback'),
@@ -101,7 +105,8 @@ urlpatterns = [
 
                   path('patient-details', views.patient_details, name='patient-details'),
                   path('add-medication/<int:id_patient>', views.add_medication, name='add-medication'),
-                  path(r'', views.default_map, name="default"),
 
                   path('logout', views.logoutUser, name='logout'),
+                  path('map', views.map, name='map'),
+
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

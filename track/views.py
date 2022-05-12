@@ -8,6 +8,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout, authenticate
 
 from . import forms, models
+from django.core.mail import send_mail
+
 from django.shortcuts import get_object_or_404
 
 
@@ -527,6 +529,7 @@ def upadateECG(request, id):
                 i.save()
     return render(request, 'updateECG.html')
 
+
 @user_passes_test(is_patient)
 def patient_feedback(request):
     if request.method == 'POST':
@@ -543,6 +546,7 @@ def patient_feedback(request):
                 return render(request, 'feedback_for_patient.html')
     return render(request, 'patient_feedback.html')
 
+
 def feedback_list(request):
     context = {}
     patient = models.Patient()
@@ -553,6 +557,7 @@ def feedback_list(request):
                 context['feedbacks'] = patient.feedbacks
                 feedbacks = patient.feedbacks.all()
         return render(request, 'patient_feedbacks.html', {'feedbacks': feedbacks})
+
 
 def show_food_list(request):
     context = {}
@@ -586,10 +591,7 @@ def updateGlucose(request, id):
     return render(request, 'updateGlucose.html')
 
 
-
 def updateBloodPressure(request, id):
-    # print(pk)
-    # if request.method == "GET":
     user = models.User.objects.get(pk=id)
     for i in models.Patient.objects.all():
         if i.user.id == user.id:
@@ -597,6 +599,14 @@ def updateBloodPressure(request, id):
                 i.Blood_Pressure = request.POST['BloodPressure']
                 i.save()
     return render(request, 'updateBloodPressure.html')
+
+
+def updateLiverFunction(request, id):
+    if request.method == 'POST':
+        user = models.Patient.objects.get(pk=id)
+        user.Liver_function = request.POST['LiverFunction']
+        user.save()
+    return render(request, 'updateLiverFunction.html')
 
 
 def show_medication_list(request):
@@ -609,7 +619,51 @@ def show_medication_list(request):
     return render(request, 'show_medication_list.html', context)
 
 
-def default_map(request):
-    mapbox_access_token = 'pk.my_mapbox_access_token'
-    return render(request, 'default.html',
-                  {'mapbox_access_token': mapbox_access_token})
+from django.shortcuts import render, redirect, reverse
+from django.conf import settings
+
+from track import mixin
+
+'''
+Basic view for routing 
+'''
+
+
+def route(request):
+    context = {
+        "google_api_key": settings.GOOGLE_API_KEY,
+        "base_country": settings.BASE_COUNTRY}
+    return render(request, 'main/route.html', context)
+
+
+'''
+Basic view for displaying a map 
+'''
+
+
+def map(request):
+    return render(request, 'map.html')
+
+
+def contact(request):
+    print("contact")
+    if request.method == 'POST':
+        form = forms.ContactForm(request.POST)
+        if form.is_valid():
+            subject = "Website Inquiry"
+            body = {
+                'first_name': form.cleaned_data['first_name'],
+                'last_name': form.cleaned_data['last_name'],
+                'email': form.cleaned_data['email_address'],
+                'message': form.cleaned_data['message'],
+            }
+            message = "\n".join(body.values())
+
+            # try:x
+            send_mail(subject, message, 'salemgode@gmail.com', ['salemgode@gmail.com'])
+            # except BadHeaderError:
+            #     return HttpResponse('Invalid header found.')
+        return redirect('')
+
+    form = forms.ContactForm()
+    return render(request, "contactus.html", {'form': form})

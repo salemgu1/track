@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$USER_HOME$/Downloads/did_django_google_api_tutorial-main/.idea/did_django_google_api_tutorial-main.iml" filepath="$USER_HOME$/Downloads/did_django_google_api_tutorial-main/.idea/did_django_google_api_tutorial-main.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/djangoProject5.iml" filepath="$PROJECT_DIR$/.idea/djangoProject5.iml" />
     </modules>
   </component>

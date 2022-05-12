@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="{% static 'map/css/map.css' %}" type="text/css">
+{% endblock extra_head %}
+
+{% block content %}
+
+    <h2 class="center">Example Map</h2>
+
+    <form id="id_search_form">
+        <input type="text" id="id_term" name="term" placeholder="Enter a search term"/>
+        <input type="submit" value="Search">
+    </form>
+
+    <div id="map">
+        <h3 id="geolocation">Geolocating...</h3>
+    </div>
+
+{% endblock content %}
+
+{% block extra_js %}
+
+    <!-- Must be before google maps include, as it contains initMap -->
+    <script type="text/javascript" src="{% static 'map/js/map.js' %}"></script>
+
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_MAPS_API_KEY }}&callback=initMap"></script>
+
+{% endblock extra_js %}
