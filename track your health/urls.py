@@ -58,6 +58,9 @@ urlpatterns = [
                   path('update-Glucose/<int:id>', views.updateGlucose, name='update-Glucose'),
                   path('update-BloodPressure/<int:id>', views.updateBloodPressure, name='update-BloodPressure'),
                   path('update-LiverFunction/<int:id>', views.updateLiverFunction, name='update-LiverFunction'),
+                  path('update-KidneyFunction/<int:id>', views.updateKidneyFunction, name='update-KidneyFunction'),
+                  path('update-Cholesterol/<int:id>', views.updateCholesterol, name='update-Cholesterol'),
+                  path('update-Fats/<int:id>', views.updateFats, name='update-Fats'),
                   path('afterlogin', views.afterlogin_view, name='afterlogin'),
 
                   path('admin-dashboard', views.admin_page, name='admin-dashboard'),
@@ -80,9 +83,9 @@ urlpatterns = [
                   path('contactus', views.contactus, name='contactus'),
                   path("contact", views.contact, name="contact"),
     
-    
-    
                   path('nurse-feedback', views.nurse_feedback, name='nurse-feedback'),
+                  path('nurse-message/<int:pk>', views.nurseMessage, name='nurse-message'),
+                  path('success-nurse', views.SuccessSent, name='success-nurse'),
                   path('admin-feedbacks', views.admin_feedbacks, name='admin-feedbacks'),
                   path('patient-feedback', views.patient_feedback, name='patient-feedback'),
                   path('send-replay/<int:pk>', views.admin_replay, name='send-replay'),

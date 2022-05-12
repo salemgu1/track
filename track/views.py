@@ -534,7 +534,7 @@ def upadateECG(request, id):
 def patient_feedback(request):
     if request.method == 'POST':
         feedback = models.Feedback()
-        feedback.name = request.POST['by']
+        feedback.by = request.user.username
         feedback.message = request.POST['message']
         feedback.senderType = request.POST['senderType']
         feedback.save()
@@ -579,6 +579,20 @@ def admin_replay(request, pk):
     return render(request, 'admin_replay.html')
 
 
+def nurseMessage(request, pk):
+    patient = models.Patient.objects.all().get(id=pk)
+    print(patient)
+    if request.method == 'POST':
+        message = models.Feedback()
+        message.by = request.user.username
+        message.message = request.POST['message']
+        message.senderType = request.POST['senderType']
+        message.save()
+        patient.feedbacks.add(message)
+        return render(request, 'message_for_nurse.html')
+    return render(request, 'nurseMessage.html', {'user': request.user})
+
+
 def updateGlucose(request, id):
     # print(pk)
     # if request.method == "GET":
@@ -607,6 +621,30 @@ def updateLiverFunction(request, id):
         user.Liver_function = request.POST['LiverFunction']
         user.save()
     return render(request, 'updateLiverFunction.html')
+
+
+def updateKidneyFunction(request, id):
+    if request.method == 'POST':
+        user = models.Patient.objects.get(pk=id)
+        user.Kidney_function = request.POST['KidneyFunction']
+        user.save()
+    return render(request, 'updateKidneyFunction.html')
+
+
+def updateCholesterol(request, id):
+    if request.method == 'POST':
+        user = models.Patient.objects.get(pk=id)
+        user.Cholesterol = request.POST['Cholesterol']
+        user.save()
+    return render(request, 'updateCholesterol.html')
+
+
+def updateFats(request, id):
+    if request.method == 'POST':
+        user = models.Patient.objects.get(pk=id)
+        user.Fats = request.POST['Fats']
+        user.save()
+    return render(request, 'updateFats.html')
 
 
 def show_medication_list(request):

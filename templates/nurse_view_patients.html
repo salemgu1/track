@@ -47,14 +47,37 @@
 
         <td> {{d.get_name}}</td>
         <td> {{d.age}}</td>
-        <td>{{d.Blood_Pressure}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Blood_Pressure}}<a href="{% url 'update-BloodPressure' d.id  %}"><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
         <td>{{d.Urine_surgery}}<a href="{% url 'update-Urine-surgery' d.id  %}"><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.Fats}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.Cholesterol}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Fats}}<a href="{% url 'update-Fats' d.id  %}"><button style="float: right">  Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Cholesterol}}<a href="{% url 'update-Cholesterol' d.id  %}"><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
         <td>{{d.Liver_function}}<a href="{% url 'update-LiverFunction' d.id  %}"><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
-        <td>{{d.Kidney_function}}<a href=""><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
+        <td>{{d.Kidney_function}}<a href="{% url 'update-KidneyFunction' d.id  %}"><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
         <td>{{d.ECG}}<a href="{% url 'update-ECG' d.id  %}"><button style="float: right">Update</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
         <td>{{d.gender}}</td>
+
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h6 class="panel-title">Messages</h6>
+    </div>
+    <table class="table table-hover" id="dev-table">
+      <thead>
+        <tr>
+
+          <th>Name</th>
+        </tr>
+      </thead>
+      {% for d in patients %}
+      <tr>
+        <td> {{d.get_name}}</td>
+        <td><a href="{% url 'nurse-message' d.id  %}"><button style="float: right">Send Message</button><i class="bi bi-arrow-up-circle-fill"></i></a></td>
       </tr>
       {% endfor %}
     </table>
