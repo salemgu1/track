@@ -623,6 +623,82 @@ def updateLiverFunction(request, id):
     return render(request, 'updateLiverFunction.html')
 
 
+def Appointment(request):
+    return render(request, 'patient_appointment.html')
+
+
+def AdminBookAppointment(request):
+    patient = models.Patient()
+    if request.method == 'POST':
+        c = False
+        for i in models.Patient.objects.all():
+            if i.user.username == request.POST['patientName']:
+                c = True
+                patient = i
+        if c:
+            patient.appointment.date = request.POST['appointment']
+            patient.appointment.time = request.POST['time']
+            patient.appointment.name = patient.user
+            ap = models.Appointment()
+            ap.date = request.POST['appointment']
+            ap.time = request.POST['time']
+            ap.name = patient.user
+            flag = True
+            for i in models.Appointment.objects.all():
+                # print(str(i.time)[0:5])
+                # print(str(patient.appointment.time))
+                # print(str(patient.appointment.date))
+                if (str(i.date) == str(patient.appointment.date) and str(i.time)[0:5] == str(patient.appointment.time)):
+                    flag = False
+                    messages.error(request, "The role is already booked")
+            if flag:
+                patient.save()
+                ap.save()
+                messages.success(request, "Book Success")
+    return render(request, 'AdminBookAppointment.html', {'patients': models.Patient.objects.all()})
+
+
+def BookAppointment(request):
+    if request.method == 'POST':
+        user = models.Patient.objects.get(user=request.user)
+        print(user)
+        user.appointment.date = request.POST['appointment']
+        user.appointment.time = request.POST['time']
+        user.appointment.name = request.user.username
+        ap = models.Appointment()
+        ap.date = request.POST['appointment']
+        ap.time = request.POST['time']
+        ap.name = user.appointment.name
+        flag = True
+        for i in models.Appointment.objects.all():
+            print(str(i.time)[0:5])
+            print(str(user.appointment.time))
+            print(str(user.appointment.time))
+            if (str(i.date) == str(user.appointment.date) and str(i.time)[0:5] == str(user.appointment.time)):
+                flag = False
+                messages.error(request, "The role is already booked")
+        if flag:
+            user.save()
+            ap.save()
+            messages.success(request, "Book Success")
+    return render(request, 'BookAppointment.html')
+
+
+def MyAppointment(request):
+    user = models.Patient.objects.get(user=request.user)
+    print(user.appointment.name)
+    return render(request, 'MyAppointment.html', {'appointment': user.appointment})
+
+
+def Admin_Appointment(request):
+    return render(request, 'admin_appointment.html')
+
+
+def adminAppointments(request):
+    appointments = models.Appointment.objects.all()
+    return render(request, 'adminAppointments.html', {'appointments': appointments})
+
+
 def updateKidneyFunction(request, id):
     if request.method == 'POST':
         user = models.Patient.objects.get(pk=id)
@@ -705,3 +781,7 @@ def contact(request):
 
     form = forms.ContactForm()
     return render(request, "contactus.html", {'form': form})
+
+
+def map(request):
+    return render(request, 'map.html')

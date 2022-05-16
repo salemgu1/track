@@ -1,23 +1,30 @@
 from django.test import TestCase
 from django.test import TestCase, tag
 from django.urls import reverse
-# Create your tests here.
 
 
-class NurseMessageTest(TestCase):
-
-    @tag('unit-test')
-    def test_message_access_url(self):
-        response = self.client.get('nurse-message')
-        self.assert_(response.status_code, 200)
+class AppointmentTest(TestCase):
 
     @tag('unit-test')
-    def test_message_access_template(self):
-        response = self.client.get(('nurse-message'))
+    def test_appointment_access_url(self):
+        response = self.client.get('appointment')
         self.assert_(response.status_code, 200)
-        self.assertTemplateNotUsed(response, 'nurseMessage.html')
 
 
+class BookAppointmentTest(TestCase):
 
+    @tag('unit-test')
+    def test_Book_Appointment_access_url(self):
+        response = self.client.get('bookappointment')
+        self.assert_(response.status_code, 200)
+     
+    @tag('unit-test')
+    def test_Show_Appointment_access_url(self):
+        response = self.client.get('My-Appointment')
+        self.assert_(response.status_code, 200)
 
-
+class AdminAppointment(TestCase):
+    @tag('unit-test')
+    def test_Bookappointment_access_url(self):
+        response = self.client.get('admin-appointment')
+        self.assert_(response.status_code, 200)

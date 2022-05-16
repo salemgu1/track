@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from django.db import models
+from django.utils.timezone import now
+from datetime import datetime
 
 
 class Doctor(models.Model):
@@ -53,6 +55,12 @@ class Medication(models.Model):
     mg = models.PositiveIntegerField(default=0)
 
 
+class Appointment(models.Model):
+    date = models.DateField(default=now)
+    name = models.CharField(default="unknown",max_length=30)
+    time = models.TimeField(default=datetime.now().time())
+
+
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     address = models.CharField(max_length=40)
@@ -74,6 +82,8 @@ class Patient(models.Model):
     food_list = models.ManyToManyField(Food)
     feedbacks = models.ManyToManyField(Feedback)
     medication_dosages = models.ManyToManyField(Medication)
+    appointment=Appointment()
+    # appointment = models.DateField(default=now)
 
     @property
     def get_name(self):
@@ -85,6 +95,12 @@ class Patient(models.Model):
 
     def __str__(self):
         return self.user.first_name + " (" + self.symptoms + ")"
+
+
+class Appointment(models.Model):
+    date = models.DateField(default=now)
+    name = models.CharField(default="unknown",max_length=30)
+    time = models.TimeField(default=datetime.now())
 
 
 class Nurse(models.Model):

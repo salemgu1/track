@@ -78,18 +78,23 @@ urlpatterns = [
                   path('admin-view-patient', views.admin_view_patient_view, name='admin-view-patient'),
                   path('admin-add-doctor', views.admin_add_doctor, name='admin-add-doctor'),
                   path('admin-view-doctor', views.admin_view_doctor_view, name='admin-view-doctor'),
+                  path('adminAppointment', views.Admin_Appointment, name='adminAppointment'),
+                  path('adminbookappointment', views.AdminBookAppointment, name='adminbookappointment'),
+                  path('admin-appointments', views.adminAppointments, name='admin-appointments'),
 
                   path('aboutus', views.about, name='aboutus'),
                   path('contactus', views.contactus, name='contactus'),
                   path("contact", views.contact, name="contact"),
-    
+
                   path('nurse-feedback', views.nurse_feedback, name='nurse-feedback'),
                   path('nurse-message/<int:pk>', views.nurseMessage, name='nurse-message'),
-                  path('success-nurse', views.SuccessSent, name='success-nurse'),
                   path('admin-feedbacks', views.admin_feedbacks, name='admin-feedbacks'),
                   path('patient-feedback', views.patient_feedback, name='patient-feedback'),
                   path('send-replay/<int:pk>', views.admin_replay, name='send-replay'),
                   path('patient-replays', views.feedback_list, name='patient-replays'),
+                  path('appointment', views.Appointment, name='appointment'),
+                  path('bookappointment', views.BookAppointment, name='bookappointment'),
+                  path('My-Appointment', views.MyAppointment, name='My-Appointment'),
 
                   # path('delete-patient-user/<int:pk>', views.delete_patient, name='delete-patient-user'),
 
