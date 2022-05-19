@@ -37,15 +37,14 @@
     }
 </style>
 <html>
-<label style="color:#0037ff;font-size:25px;" for="destination">destination: </label>
-<input type="text" name="destination" id="lat" value="superpharm beersheva" required>
-<input type="submit" value="Update" onclick="reload()">
+
 <head>
     <br>
     <br>
     <title>Travel Modes in Directions</title>
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
     <script>
+        klk="superpharm beersheva"
         function initMap() {
             const directionsRenderer = new google.maps.DirectionsRenderer();
             const directionsService = new google.maps.DirectionsService();
@@ -110,7 +109,7 @@
                     directionsService
                         .route({
                             origin: x,
-                            destination: "superpharm beersheva",
+                            destination:document.getElementById("lat").value,
                             travelMode: google.maps.TravelMode[selectedMode],
                         })
                         .then((response) => {
@@ -122,12 +121,7 @@
         }
 
         function reload() {
-            const directionsRenderer = new google.maps.DirectionsRenderer();
-            const directionsService = new google.maps.DirectionsService();
-            calculateAndDisplayRoute(directionsService, directionsRenderer);
-            document.getElementById("mode").addEventListener("change", () => {
-                calculateAndDisplayRoute(directionsService, directionsRenderer);
-            });
+          initMap()
         }
 
         window.initMap = initMap;
@@ -135,6 +129,9 @@
     </script>
 </head>
 <body>
+<label style="color:#0037ff;font-size:25px;" for="destination">destination: </label>
+<input type="text" name="lat" id="lat" value="superpharm beersheva" required>
+<input type="submit" value="Update" onclick="reload()">
 <div id="floating-panel">
     <b>Mode of Travel: </b>
     <select id="mode">
@@ -146,7 +143,7 @@
 </div>
 <div id="map"></div>
 
-<input type="text" name="" value="">
+<input type="text" name="" id="dest" value="">
 <form class="" action="index.html" method="post">
 
 </form>
